@@ -13,7 +13,7 @@ class StructureSeeder extends Seeder
     public function run(): void
     {
         $data = [];
-        $data[] = ['name' => 'Dövlət Su Ehtiyatları Agentliyi', 'parent_id' => 0, 'order' => 1, 'structure_type_id' => 1];
+        $data[] = ['name' => 'Dövlət Su Ehtiyatları Agentliyi', 'parent_id' => null, 'description' => null, 'order' => 1, 'structure_type_id' => 1];
 
         DB::table('structure')->insert($data);
     }

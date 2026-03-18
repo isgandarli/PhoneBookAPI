@@ -15,6 +15,7 @@ class Structure extends Model
 
     protected $fillable = [
         'name',
+        'description',
         'parent_id',
         'structure_type_id',
         'order',

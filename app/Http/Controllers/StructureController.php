@@ -33,15 +33,17 @@ class StructureController extends Controller
         $request->validate([
             'structure_type_id' => 'required|integer|exists:structure_types,id',
             'name' => 'required|string|unique:structure,name',
+            'description' => 'nullable|string',
             'order' => 'required|integer',
-            'parent_id' => 'required|integer|exists:structure,id',
+            'parent_id' => 'nullable|integer|exists:structure,id',
         ]);
 
         $structure = new Structure();
         $structure->structure_type_id = $request['structure_type_id'];
         $structure->name = $request['name'];
+        $structure->description = $request['description'] ?? null;
         $structure->order = $request['order'];
-        $structure->parent_id = $request->filled('parent_id') ? $request['parent_id'] : 0;
+        $structure->parent_id = $request['parent_id'] ?? null;
         $structure->save();
 
         return response()->json($structure, 201);
@@ -59,6 +61,7 @@ class StructureController extends Controller
             'parent_id' => 'nullable|integer|exists:structure,id',
             'structure_type_id' => 'nullable|integer|exists:structure_types,id',
             'name' => 'nullable|string|unique:structure,name,' . $id,
+            'description' => 'nullable|string',
             'order' => 'nullable|integer',
         ]);
 
