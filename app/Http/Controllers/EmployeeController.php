@@ -25,21 +25,21 @@ class EmployeeController extends Controller
         if ($request->filled('name')) {
             $name = $request->input('name');
             $query->where(function ($q) use ($name) {
-                $q->where('first_name', 'like', "%{$name}%")
-                  ->orWhere('last_name', 'like', "%{$name}%")
-                  ->orWhere('father_name', 'like', "%{$name}%");
+                $q->where('first_name', 'ilike', "%{$name}%")
+                  ->orWhere('last_name', 'ilike', "%{$name}%")
+                  ->orWhere('father_name', 'ilike', "%{$name}%");
             });
         }
 
         if ($request->filled('email')) {
-            $query->where('email', 'like', "%{$request->input('email')}%");
+            $query->where('email', 'ilike', "%{$request->input('email')}%");
         }
 
         if ($request->filled('phone_number')) {
             $phone = $request->input('phone_number');
             $query->where(function ($q) use ($phone) {
-                $q->where('landline_number', 'like', "%{$phone}%")
-                  ->orWhere('mobile_number', 'like', "%{$phone}%");
+                $q->where('landline_number', 'ilike', "%{$phone}%")
+                  ->orWhere('mobile_number', 'ilike', "%{$phone}%");
             });
         }
 
