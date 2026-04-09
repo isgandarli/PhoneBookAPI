@@ -20,6 +20,7 @@ class Employee extends Model
         'email',
         'landline_number',
         'mobile_number',
+        'description',
         'order',
         'position_id',
         'structure_id',
