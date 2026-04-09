@@ -1,0 +1,23 @@
+meta {
+  name: List All Structures
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/structures
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Get all structures with their structure type.
+}

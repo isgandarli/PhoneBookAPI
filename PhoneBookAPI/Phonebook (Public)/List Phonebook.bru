@@ -1,0 +1,23 @@
+meta {
+  name: List Phonebook
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/phonebook
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Public endpoint. Returns all employees with their position and structure (including structure type). No authentication required.
+}

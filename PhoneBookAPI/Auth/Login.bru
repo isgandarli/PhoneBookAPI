@@ -1,0 +1,38 @@
+meta {
+  name: Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "username": "admin",
+    "password": "adminpanel123"
+  }
+}
+
+script:post-response {
+  var jsonData = res.getBody();
+  if (jsonData.access_token) {
+      bru.setVar('token', jsonData.access_token);
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Authenticate and receive a JWT token. Token is automatically saved to collection variable.
+}

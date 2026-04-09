@@ -1,0 +1,30 @@
+meta {
+  name: Create Position
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/positions
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "name": "direktor"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Create a new position. Name must be unique.
+}

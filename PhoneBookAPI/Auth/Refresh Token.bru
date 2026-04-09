@@ -1,0 +1,30 @@
+meta {
+  name: Refresh Token
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/auth/refresh
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+script:post-response {
+  var jsonData = res.getBody();
+  if (jsonData.access_token) {
+      bru.setVar('token', jsonData.access_token);
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Refresh an expired token (within the refresh window). New token is automatically saved.
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Update Employee
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/employees/1
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "mobile_number": "+994551234567"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Partial update. Only send fields you want to change.
+}

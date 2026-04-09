@@ -1,0 +1,23 @@
+meta {
+  name: Show Employee
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/employees/1
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Get a single employee by ID with position and structure.
+}

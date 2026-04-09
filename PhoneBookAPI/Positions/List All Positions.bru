@@ -1,0 +1,20 @@
+meta {
+  name: List All Positions
+  type: http
+  seq: 1
+}
+
+get {
+  url: 172.16.12.94:8080/api/positions
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc3NTA0Nzk0MywiZXhwIjoxNzc1MDUxNTQzLCJ1c2VybmFtZSI6ImFkbWluIn0.5gyKQzsaxKrGHwKvC5nrJMk8oEEgVzRaASibt47g-38
+}
+
+docs {
+  Get all positions.
+}

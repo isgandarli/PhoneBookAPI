@@ -1,0 +1,33 @@
+meta {
+  name: Create Structure
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/structures
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "name": "İT Şöbəsi",
+    "structure_type_id": 2,
+    "order": 1,
+    "parent_id": 1
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Create a new structure. Name must be unique. parent_id must reference an existing structure.
+}

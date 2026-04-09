@@ -1,0 +1,38 @@
+meta {
+  name: Create Employee
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/employees
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "first_name": "Elvin",
+    "last_name": "Həsənov",
+    "father_name": "Rəşad",
+    "email": "elvin.hasanov@example.com",
+    "landline_number": "012-555-1234",
+    "mobile_number": "+994501234567",
+    "order": 1,
+    "position_id": 1,
+    "structure_id": 1
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Create a new employee. landline_number is required and must be unique. position_id and structure_id must reference existing records.
+}

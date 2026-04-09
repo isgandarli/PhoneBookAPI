@@ -1,0 +1,23 @@
+meta {
+  name: Delete Position
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/positions/1
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Soft delete a position.
+}

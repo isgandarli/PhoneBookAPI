@@ -1,0 +1,30 @@
+meta {
+  name: Update Structure Type
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/structure-types/1
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "name": "Baş İdarə"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Update a structure type. Name must be unique (excluding current record).
+}

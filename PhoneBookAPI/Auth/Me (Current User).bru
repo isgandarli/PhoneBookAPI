@@ -1,0 +1,23 @@
+meta {
+  name: Me (Current User)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/auth/me
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Get the authenticated user's profile.
+}

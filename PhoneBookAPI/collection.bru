@@ -1,0 +1,20 @@
+meta {
+  name: PhoneBookAPI
+}
+
+auth {
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+vars:pre-request {
+  base_url: http://127.0.0.1:8000/api
+  token: 
+}
+
+docs {
+  Corporate Phonebook API — JWT authenticated CRUD endpoints for managing organizational structure and employees.
+}

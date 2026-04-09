@@ -1,0 +1,30 @@
+meta {
+  name: Update Structure
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/structures/1
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "name": "İnformasiya Texnologiyaları Şöbəsi"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Partial update. Only send fields you want to change.
+}

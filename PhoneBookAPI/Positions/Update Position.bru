@@ -1,0 +1,30 @@
+meta {
+  name: Update Position
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/positions/1
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "name": "baş mühəndis"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  Update a position. Name must be unique (excluding current record).
+}
