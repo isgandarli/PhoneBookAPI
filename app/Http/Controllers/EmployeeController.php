@@ -7,10 +7,43 @@ use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $employees = Employee::with(['position', 'structure'])
-            ->orderBy('structure_id')
+        $request->validate([
+            'structure_id' => 'nullable|integer|exists:structure,id',
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
+        ]);
+
+        $query = Employee::with(['position', 'structure']);
+
+        if ($request->filled('structure_id')) {
+            $query->where('structure_id', $request->input('structure_id'));
+        }
+
+        if ($request->filled('name')) {
+            $name = $request->input('name');
+            $query->where(function ($q) use ($name) {
+                $q->where('first_name', 'like', "%{$name}%")
+                  ->orWhere('last_name', 'like', "%{$name}%")
+                  ->orWhere('father_name', 'like', "%{$name}%");
+            });
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'like', "%{$request->input('email')}%");
+        }
+
+        if ($request->filled('phone_number')) {
+            $phone = $request->input('phone_number');
+            $query->where(function ($q) use ($phone) {
+                $q->where('landline_number', 'like', "%{$phone}%")
+                  ->orWhere('mobile_number', 'like', "%{$phone}%");
+            });
+        }
+
+        $employees = $query->orderBy('structure_id')
             ->orderBy('order')
             ->get();
 
