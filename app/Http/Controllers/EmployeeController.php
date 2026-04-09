@@ -9,7 +9,10 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::with(['position', 'structure'])->get();
+        $employees = Employee::with(['position', 'structure'])
+            ->orderBy('structure_id')
+            ->orderBy('order')
+            ->get();
 
         return response()->json($employees);
     }
@@ -37,20 +40,31 @@ class EmployeeController extends Controller
             'email' => 'email|nullable',
             'landline_number' => 'required|string|unique:employees,landline_number',
             'mobile_number' => 'string|unique:employees,mobile_number|nullable',
-            'order' => 'required|integer',
+            'order' => 'nullable|integer',
             'position_id' => 'required|integer|exists:positions,id',
             'structure_id' => 'required|integer|exists:structure,id',
         ]);
 
-        $employee = new Employee();
-        $fillable = $employee->getFillable();
-        foreach ($fillable as $field)
-        {
-            if ($request->has($field) && $request->filled($field))
-            {
-                $employee->$field = $request->input($field);
-            }
+        $structureId = $request->input('structure_id');
+        $siblings = Employee::where('structure_id', $structureId);
+
+        if ($request->filled('order')) {
+            $newOrder = $request->input('order');
+            $siblings->where('order', '>=', $newOrder)->increment('order');
+        } else {
+            $newOrder = ($siblings->max('order') ?? 0) + 1;
         }
+
+        $employee = new Employee();
+        $employee->first_name = $request->input('first_name');
+        $employee->last_name = $request->input('last_name');
+        $employee->father_name = $request->input('father_name');
+        $employee->email = $request->input('email');
+        $employee->landline_number = $request->input('landline_number');
+        $employee->mobile_number = $request->input('mobile_number');
+        $employee->order = $newOrder;
+        $employee->position_id = $request->input('position_id');
+        $employee->structure_id = $structureId;
         $employee->save();
 
         return response()->json($employee->load(['position', 'structure']), 201);
@@ -77,14 +91,55 @@ class EmployeeController extends Controller
         ]);
 
         $employee = Employee::find($id);
+        $oldStructureId = $employee->structure_id;
+        $oldOrder = $employee->order;
+        $newStructureId = $request->filled('structure_id') ? $request->input('structure_id') : $oldStructureId;
+        $newOrder = $request->filled('order') ? $request->input('order') : null;
+        $structureChanged = $newStructureId != $oldStructureId;
+
+        if ($structureChanged) {
+            // Close gap in old structure's employees
+            Employee::where('structure_id', $oldStructureId)
+                ->where('order', '>', $oldOrder)
+                ->decrement('order');
+
+            // Make room in new structure's employees
+            if ($newOrder !== null) {
+                Employee::where('structure_id', $newStructureId)
+                    ->where('order', '>=', $newOrder)
+                    ->increment('order');
+            } else {
+                $newOrder = (Employee::where('structure_id', $newStructureId)->max('order') ?? 0) + 1;
+            }
+
+            $employee->structure_id = $newStructureId;
+            $employee->order = $newOrder;
+        } elseif ($newOrder !== null && $newOrder != $oldOrder) {
+            if ($newOrder < $oldOrder) {
+                Employee::where('structure_id', $oldStructureId)
+                    ->where('id', '!=', $employee->id)
+                    ->whereBetween('order', [$newOrder, $oldOrder - 1])
+                    ->increment('order');
+            } else {
+                Employee::where('structure_id', $oldStructureId)
+                    ->where('id', '!=', $employee->id)
+                    ->whereBetween('order', [$oldOrder + 1, $newOrder])
+                    ->decrement('order');
+            }
+
+            $employee->order = $newOrder;
+        }
+
+        // Update remaining fillable fields (except order and structure_id handled above)
+        $skipFields = ['order', 'structure_id'];
         $fillable = $employee->getFillable();
-        foreach ($fillable as $field)
-        {
-            if ($request->has($field) && $request->filled($field))
-            {
+        foreach ($fillable as $field) {
+            if (in_array($field, $skipFields)) continue;
+            if ($request->has($field) && $request->filled($field)) {
                 $employee->$field = $request->input($field);
             }
         }
+
         $employee->save();
 
         return response()->json($employee->load(['position', 'structure']));
@@ -100,7 +155,15 @@ class EmployeeController extends Controller
         ]);
 
         $employee = Employee::find($id);
+        $structureId = $employee->structure_id;
+        $order = $employee->order;
+
         $employee->delete();
+
+        // Close gap in siblings
+        Employee::where('structure_id', $structureId)
+            ->where('order', '>', $order)
+            ->decrement('order');
 
         return response()->json(['message' => 'İşçi uğurla silindi']);
     }
