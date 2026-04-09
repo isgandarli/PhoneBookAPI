@@ -744,12 +744,33 @@ Manage employee records.
 
 ### 6.1 List All Employees
 
-Returns all employees with their position and structure.
+Returns all employees with their position and structure. Supports optional query parameters for filtering.
 
 | | |
 |---|---|
 | **URL** | `GET /api/employees` |
 | **Auth** | Bearer Token |
+
+**Query Parameters (all optional):**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| structure_id | integer | Exact match — filter by structure. Must be a valid structure ID |
+| name | string | Partial, case-insensitive match across `first_name`, `last_name`, and `father_name` |
+| email | string | Partial, case-insensitive match on `email` |
+| phone_number | string | Partial, case-insensitive match across `landline_number` and `mobile_number` |
+
+Filters are composable — multiple parameters are combined with AND logic.
+
+**Example Requests:**
+```
+GET /api/employees                              — all employees
+GET /api/employees?structure_id=11              — employees in structure 11
+GET /api/employees?name=bayram                  — employees whose name contains "bayram"
+GET /api/employees?email=adsea                  — employees whose email contains "adsea"
+GET /api/employees?phone_number=709             — employees whose phone contains "709"
+GET /api/employees?name=bayram&structure_id=12  — combined filters
+```
 
 **Success Response (200):**
 ```json
@@ -1057,7 +1078,7 @@ Partial update — only send the fields you want to change.
 | POST | `/api/structures` | Yes | Create structure |
 | PUT | `/api/structures/{id}` | Yes | Update structure |
 | DELETE | `/api/structures/{id}` | Yes | Delete structure |
-| GET | `/api/employees` | Yes | List employees |
+| GET | `/api/employees` | Yes | List employees (supports filtering via query params) |
 | GET | `/api/employees/{id}` | Yes | Show employee |
 | POST | `/api/employees` | Yes | Create employee |
 | PUT | `/api/employees/{id}` | Yes | Update employee |

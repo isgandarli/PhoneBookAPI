@@ -744,12 +744,33 @@ Qismən yeniləmə — yalnız dəyişdirmək istədiyiniz sahələri göndərin
 
 ### 6.1 Bütün İşçiləri Göstər
 
-Bütün işçiləri vəzifə və struktur məlumatları ilə qaytarır.
+Bütün işçiləri vəzifə və struktur məlumatları ilə qaytarır. Filtrasiya üçün istəyə bağlı sorğu parametrlərini dəstəkləyir.
 
 | | |
 |---|---|
 | **URL** | `GET /api/employees` |
 | **Autentifikasiya** | Bearer Token |
+
+**Sorğu Parametrləri (hamısı istəyə bağlı):**
+
+| Parametr | Tip | Açıqlama |
+|----------|-----|----------|
+| structure_id | integer | Dəqiq uyğunluq — struktura görə filtr. Etibarlı struktur ID-si olmalıdır |
+| name | string | Qismən, böyük/kiçik hərfə həssas olmayan axtarış `first_name`, `last_name` və `father_name` üzrə |
+| email | string | Qismən, böyük/kiçik hərfə həssas olmayan axtarış `email` üzrə |
+| phone_number | string | Qismən, böyük/kiçik hərfə həssas olmayan axtarış `landline_number` və `mobile_number` üzrə |
+
+Filtrlər birləşdirilə bilər — bir neçə parametr AND məntiqi ilə tətbiq edilir.
+
+**Nümunə Sorğular:**
+```
+GET /api/employees                              — bütün işçilər
+GET /api/employees?structure_id=11              — 11 nömrəli strukturdakı işçilər
+GET /api/employees?name=bayram                  — adında "bayram" olan işçilər
+GET /api/employees?email=adsea                  — emailində "adsea" olan işçilər
+GET /api/employees?phone_number=709             — telefon nömrəsində "709" olan işçilər
+GET /api/employees?name=bayram&structure_id=12  — birləşdirilmiş filtrlər
+```
 
 **Uğurlu Cavab (200):**
 ```json
@@ -1057,7 +1078,7 @@ Qismən yeniləmə — yalnız dəyişdirmək istədiyiniz sahələri göndərin
 | POST | `/api/structures` | Bəli | Struktur yarat |
 | PUT | `/api/structures/{id}` | Bəli | Strukturu yenilə |
 | DELETE | `/api/structures/{id}` | Bəli | Strukturu sil |
-| GET | `/api/employees` | Bəli | İşçiləri göstər |
+| GET | `/api/employees` | Bəli | İşçiləri göstər (sorğu parametrləri ilə filtrasiya dəstəkləyir) |
 | GET | `/api/employees/{id}` | Bəli | İşçini göstər |
 | POST | `/api/employees` | Bəli | İşçi yarat |
 | PUT | `/api/employees/{id}` | Bəli | İşçini yenilə |

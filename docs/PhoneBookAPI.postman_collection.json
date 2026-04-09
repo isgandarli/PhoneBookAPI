@@ -1,648 +1,790 @@
 {
-	"info": {
-		"name": "PhoneBookAPI",
-		"description": "Corporate Phonebook API — JWT authenticated CRUD endpoints for managing organizational structure and employees.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"variable": [
-		{
-			"key": "base_url",
-			"value": "http://127.0.0.1:8000/api",
-			"type": "string"
-		},
-		{
-			"key": "token",
-			"value": "",
-			"type": "string"
-		}
-	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "{{token}}",
-				"type": "string"
-			}
-		]
-	},
-	"item": [
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "Login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"var jsonData = pm.response.json();",
-									"if (jsonData.access_token) {",
-									"    pm.collectionVariables.set('token', jsonData.access_token);",
-									"}"
-								]
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"adminpanel123\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/auth/login",
-							"host": ["{{base_url}}"],
-							"path": ["auth", "login"]
-						},
-						"description": "Authenticate and receive a JWT token. Token is automatically saved to collection variable."
-					},
-					"response": []
-				},
-				{
-					"name": "Logout",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/auth/logout",
-							"host": ["{{base_url}}"],
-							"path": ["auth", "logout"]
-						},
-						"description": "Logout the current user. Client should discard the token."
-					},
-					"response": []
-				},
-				{
-					"name": "Refresh Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"var jsonData = pm.response.json();",
-									"if (jsonData.access_token) {",
-									"    pm.collectionVariables.set('token', jsonData.access_token);",
-									"}"
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/auth/refresh",
-							"host": ["{{base_url}}"],
-							"path": ["auth", "refresh"]
-						},
-						"description": "Refresh an expired token (within the refresh window). New token is automatically saved."
-					},
-					"response": []
-				},
-				{
-					"name": "Me (Current User)",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/auth/me",
-							"host": ["{{base_url}}"],
-							"path": ["auth", "me"]
-						},
-						"description": "Get the authenticated user's profile."
-					},
-					"response": []
-				}
-			],
-			"description": "Authentication endpoints (login, logout, refresh, current user)."
-		},
-		{
-			"name": "Phonebook (Public)",
-			"item": [
-				{
-					"name": "List Phonebook",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/phonebook",
-							"host": ["{{base_url}}"],
-							"path": ["phonebook"]
-						},
-						"description": "Public endpoint. Returns all employees with their position and structure (including structure type). No authentication required."
-					},
-					"response": []
-				}
-			],
-			"description": "Public-facing phonebook endpoint. No authentication required."
-		},
-		{
-			"name": "Structure Types",
-			"item": [
-				{
-					"name": "List All Structure Types",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/structure-types",
-							"host": ["{{base_url}}"],
-							"path": ["structure-types"]
-						},
-						"description": "Get all structure types."
-					},
-					"response": []
-				},
-				{
-					"name": "Show Structure Type",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/structure-types/1",
-							"host": ["{{base_url}}"],
-							"path": ["structure-types", "1"]
-						},
-						"description": "Get a single structure type by ID."
-					},
-					"response": []
-				},
-				{
-					"name": "Create Structure Type",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"İdarə\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/structure-types",
-							"host": ["{{base_url}}"],
-							"path": ["structure-types"]
-						},
-						"description": "Create a new structure type. Name must be unique."
-					},
-					"response": []
-				},
-				{
-					"name": "Update Structure Type",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"Baş İdarə\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/structure-types/1",
-							"host": ["{{base_url}}"],
-							"path": ["structure-types", "1"]
-						},
-						"description": "Update a structure type. Name must be unique (excluding current record)."
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Structure Type",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/structure-types/1",
-							"host": ["{{base_url}}"],
-							"path": ["structure-types", "1"]
-						},
-						"description": "Soft delete a structure type."
-					},
-					"response": []
-				}
-			],
-			"description": "CRUD operations for structure types (e.g., Kök Struktur, Şöbə, Sektor). All endpoints require JWT."
-		},
-		{
-			"name": "Positions",
-			"item": [
-				{
-					"name": "List All Positions",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/positions",
-							"host": ["{{base_url}}"],
-							"path": ["positions"]
-						},
-						"description": "Get all positions."
-					},
-					"response": []
-				},
-				{
-					"name": "Show Position",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/positions/1",
-							"host": ["{{base_url}}"],
-							"path": ["positions", "1"]
-						},
-						"description": "Get a single position by ID."
-					},
-					"response": []
-				},
-				{
-					"name": "Create Position",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"direktor\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/positions",
-							"host": ["{{base_url}}"],
-							"path": ["positions"]
-						},
-						"description": "Create a new position. Name must be unique."
-					},
-					"response": []
-				},
-				{
-					"name": "Update Position",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"baş mühəndis\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/positions/1",
-							"host": ["{{base_url}}"],
-							"path": ["positions", "1"]
-						},
-						"description": "Update a position. Name must be unique (excluding current record)."
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Position",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/positions/1",
-							"host": ["{{base_url}}"],
-							"path": ["positions", "1"]
-						},
-						"description": "Soft delete a position."
-					},
-					"response": []
-				}
-			],
-			"description": "CRUD operations for employee positions (e.g., mühəndis, direktor). All endpoints require JWT."
-		},
-		{
-			"name": "Structures",
-			"item": [
-				{
-					"name": "List All Structures",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/structures",
-							"host": ["{{base_url}}"],
-							"path": ["structures"]
-						},
-						"description": "Get all structures with their structure type."
-					},
-					"response": []
-				},
-				{
-					"name": "Show Structure",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/structures/1",
-							"host": ["{{base_url}}"],
-							"path": ["structures", "1"]
-						},
-						"description": "Get a single structure by ID with its structure type."
-					},
-					"response": []
-				},
-				{
-					"name": "Create Structure",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"İT Şöbəsi\",\n  \"description\": \"İnformasiya texnologiyaları şöbəsi\",\n  \"structure_type_id\": 2,\n  \"order\": 1,\n  \"parent_id\": 1\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/structures",
-							"host": ["{{base_url}}"],
-							"path": ["structures"]
-						},
-						"description": "Create a new structure. Name must be unique. parent_id is optional (null for root structures) and must reference an existing structure if provided. description is optional."
-					},
-					"response": []
-				},
-				{
-					"name": "Update Structure",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"İnformasiya Texnologiyaları Şöbəsi\",\n  \"description\": \"Yenilənmiş təsvir\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/structures/1",
-							"host": ["{{base_url}}"],
-							"path": ["structures", "1"]
-						},
-						"description": "Partial update. Only send fields you want to change. Supports: name, description, structure_type_id, order, parent_id."
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Structure",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/structures/1",
-							"host": ["{{base_url}}"],
-							"path": ["structures", "1"]
-						},
-						"description": "Soft delete a structure."
-					},
-					"response": []
-				}
-			],
-			"description": "CRUD operations for organizational structures. All endpoints require JWT."
-		},
-		{
-			"name": "Employees",
-			"item": [
-				{
-					"name": "List All Employees",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/employees",
-							"host": ["{{base_url}}"],
-							"path": ["employees"]
-						},
-						"description": "Get all employees with their position and structure."
-					},
-					"response": []
-				},
-				{
-					"name": "Show Employee",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/employees/1",
-							"host": ["{{base_url}}"],
-							"path": ["employees", "1"]
-						},
-						"description": "Get a single employee by ID with position and structure."
-					},
-					"response": []
-				},
-				{
-					"name": "Create Employee",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"Elvin\",\n  \"last_name\": \"Həsənov\",\n  \"father_name\": \"Rəşad\",\n  \"email\": \"elvin.hasanov@example.com\",\n  \"landline_number\": \"012-555-1234\",\n  \"mobile_number\": \"+994501234567\",\n  \"order\": 1,\n  \"position_id\": 1,\n  \"structure_id\": 1\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/employees",
-							"host": ["{{base_url}}"],
-							"path": ["employees"]
-						},
-						"description": "Create a new employee. landline_number is required and must be unique. position_id and structure_id must reference existing records."
-					},
-					"response": []
-				},
-				{
-					"name": "Update Employee",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"mobile_number\": \"+994551234567\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/employees/1",
-							"host": ["{{base_url}}"],
-							"path": ["employees", "1"]
-						},
-						"description": "Partial update. Only send fields you want to change."
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Employee",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/employees/1",
-							"host": ["{{base_url}}"],
-							"path": ["employees", "1"]
-						},
-						"description": "Soft delete an employee."
-					},
-					"response": []
-				}
-			],
-			"description": "CRUD operations for employees. All endpoints require JWT."
-		}
-	]
+    "info": {
+        "name": "PhoneBookAPI",
+        "description": "Corporate Phonebook API — JWT authenticated CRUD endpoints for managing organizational structure and employees.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000/api",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.access_token) {",
+                                    "    pm.collectionVariables.set('token', jsonData.access_token);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"adminpanel123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "description": "Authenticate and receive a JWT token. Token is automatically saved to collection variable."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/logout",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "logout"
+                            ]
+                        },
+                        "description": "Logout the current user. Client should discard the token."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Refresh Token",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.access_token) {",
+                                    "    pm.collectionVariables.set('token', jsonData.access_token);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/refresh",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "refresh"
+                            ]
+                        },
+                        "description": "Refresh an expired token (within the refresh window). New token is automatically saved."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Me (Current User)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/me",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "me"
+                            ]
+                        },
+                        "description": "Get the authenticated user's profile."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Authentication endpoints (login, logout, refresh, current user)."
+        },
+        {
+            "name": "Phonebook (Public)",
+            "item": [
+                {
+                    "name": "List Phonebook",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/phonebook",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "phonebook"
+                            ]
+                        },
+                        "description": "Public endpoint. Returns all employees with their position and structure (including structure type). No authentication required."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Public-facing phonebook endpoint. No authentication required."
+        },
+        {
+            "name": "Structure Types",
+            "item": [
+                {
+                    "name": "List All Structure Types",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/structure-types",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "structure-types"
+                            ]
+                        },
+                        "description": "Get all structure types."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Show Structure Type",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/structure-types/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "structure-types",
+                                "1"
+                            ]
+                        },
+                        "description": "Get a single structure type by ID."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Structure Type",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"İdarə\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/structure-types",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "structure-types"
+                            ]
+                        },
+                        "description": "Create a new structure type. Name must be unique."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Structure Type",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Baş İdarə\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/structure-types/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "structure-types",
+                                "1"
+                            ]
+                        },
+                        "description": "Update a structure type. Name must be unique (excluding current record)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Structure Type",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/structure-types/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "structure-types",
+                                "1"
+                            ]
+                        },
+                        "description": "Soft delete a structure type."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "CRUD operations for structure types (e.g., Kök Struktur, Şöbə, Sektor). All endpoints require JWT."
+        },
+        {
+            "name": "Positions",
+            "item": [
+                {
+                    "name": "List All Positions",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/positions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "positions"
+                            ]
+                        },
+                        "description": "Get all positions."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Show Position",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/positions/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "positions",
+                                "1"
+                            ]
+                        },
+                        "description": "Get a single position by ID."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Position",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"direktor\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/positions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "positions"
+                            ]
+                        },
+                        "description": "Create a new position. Name must be unique."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Position",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"baş mühəndis\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/positions/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "positions",
+                                "1"
+                            ]
+                        },
+                        "description": "Update a position. Name must be unique (excluding current record)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Position",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/positions/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "positions",
+                                "1"
+                            ]
+                        },
+                        "description": "Soft delete a position."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "CRUD operations for employee positions (e.g., mühəndis, direktor). All endpoints require JWT."
+        },
+        {
+            "name": "Structures",
+            "item": [
+                {
+                    "name": "List All Structures",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/structures",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "structures"
+                            ]
+                        },
+                        "description": "Get all structures with their structure type."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Show Structure",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/structures/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "structures",
+                                "1"
+                            ]
+                        },
+                        "description": "Get a single structure by ID with its structure type."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Structure",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"İT Şöbəsi\",\n  \"description\": \"İnformasiya texnologiyaları şöbəsi\",\n  \"structure_type_id\": 2,\n  \"order\": 1,\n  \"parent_id\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/structures",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "structures"
+                            ]
+                        },
+                        "description": "Create a new structure. Name must be unique. parent_id is optional (null for root structures) and must reference an existing structure if provided. description is optional."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Structure",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"İnformasiya Texnologiyaları Şöbəsi\",\n  \"description\": \"Yenilənmiş təsvir\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/structures/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "structures",
+                                "1"
+                            ]
+                        },
+                        "description": "Partial update. Only send fields you want to change. Supports: name, description, structure_type_id, order, parent_id."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Structure",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/structures/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "structures",
+                                "1"
+                            ]
+                        },
+                        "description": "Soft delete a structure."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "CRUD operations for organizational structures. All endpoints require JWT."
+        },
+        {
+            "name": "Employees",
+            "item": [
+                {
+                    "name": "List All Employees",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/employees",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "employees"
+                            ],
+                            "query": [
+                                {
+                                    "key": "structure_id",
+                                    "value": "11",
+                                    "description": "Filter by structure ID (exact match)",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "name",
+                                    "value": "bayram",
+                                    "description": "Partial, case-insensitive match on first_name, last_name, father_name",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "adsea",
+                                    "description": "Partial, case-insensitive match on email",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "phone_number",
+                                    "value": "709",
+                                    "description": "Partial, case-insensitive match on landline_number and mobile_number",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Get all employees with their position and structure. Supports optional query parameter filters: structure_id (exact), name (partial), email (partial), phone_number (partial). Filters are composable with AND logic. Enable the query params you need."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Show Employee",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/employees/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "employees",
+                                "1"
+                            ]
+                        },
+                        "description": "Get a single employee by ID with position and structure."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Employee",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"first_name\": \"Elvin\",\n  \"last_name\": \"Həsənov\",\n  \"father_name\": \"Rəşad\",\n  \"email\": \"elvin.hasanov@example.com\",\n  \"landline_number\": \"012-555-1234\",\n  \"mobile_number\": \"+994501234567\",\n  \"order\": 1,\n  \"position_id\": 1,\n  \"structure_id\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/employees",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "employees"
+                            ]
+                        },
+                        "description": "Create a new employee. landline_number is required and must be unique. position_id and structure_id must reference existing records."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Employee",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"mobile_number\": \"+994551234567\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/employees/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "employees",
+                                "1"
+                            ]
+                        },
+                        "description": "Partial update. Only send fields you want to change."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Employee",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/employees/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "employees",
+                                "1"
+                            ]
+                        },
+                        "description": "Soft delete an employee."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "CRUD operations for employees. All endpoints require JWT."
+        }
+    ]
 }

@@ -10,6 +10,13 @@ get {
   auth: inherit
 }
 
+params:query {
+  ~structure_id: 11
+  ~name: bayram
+  ~email: adsea
+  ~phone_number: 709
+}
+
 headers {
   Accept: application/json
 }
@@ -20,4 +27,12 @@ settings {
 
 docs {
   Get all employees with their position and structure.
+
+  Supports optional query parameter filters (all disabled by default — enable as needed):
+  - structure_id: Filter by structure ID (exact match)
+  - name: Partial, case-insensitive match on first_name, last_name, father_name
+  - email: Partial, case-insensitive match on email
+  - phone_number: Partial, case-insensitive match on landline_number and mobile_number
+
+  Filters are composable with AND logic.
 }
