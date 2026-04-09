@@ -23,7 +23,7 @@ class Structure extends Model
 
     public function children()
     {
-        return $this->hasMany(Structure::class, 'parent_id');
+        return $this->hasMany(Structure::class, 'parent_id')->orderBy('order');
     }
 
     public function parent()
@@ -38,6 +38,6 @@ class Structure extends Model
 
     public function employees()
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasMany(Employee::class)->orderBy('order');
     }
 }
