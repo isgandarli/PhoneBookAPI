@@ -36,7 +36,7 @@ class StructureController extends Controller
         $request->validate([
             'structure_type_id' => 'required|integer|exists:structure_types,id',
             'name' => 'required|string|unique:structure,name',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:1024',
             'order' => 'nullable|integer',
             'parent_id' => 'nullable|integer|exists:structure,id',
         ]);
@@ -76,7 +76,7 @@ class StructureController extends Controller
             'parent_id' => 'nullable|integer|exists:structure,id',
             'structure_type_id' => 'nullable|integer|exists:structure_types,id',
             'name' => 'nullable|string|unique:structure,name,' . $id,
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:1024',
             'order' => 'nullable|integer',
         ]);
 

@@ -40,6 +40,7 @@ class EmployeeController extends Controller
             'email' => 'email|nullable',
             'landline_number' => 'required|string|unique:employees,landline_number',
             'mobile_number' => 'string|unique:employees,mobile_number|nullable',
+            'description' => 'nullable|string|max:1024',
             'order' => 'nullable|integer',
             'position_id' => 'required|integer|exists:positions,id',
             'structure_id' => 'required|integer|exists:structure,id',
@@ -62,6 +63,7 @@ class EmployeeController extends Controller
         $employee->email = $request->input('email');
         $employee->landline_number = $request->input('landline_number');
         $employee->mobile_number = $request->input('mobile_number');
+        $employee->description = $request->input('description');
         $employee->order = $newOrder;
         $employee->position_id = $request->input('position_id');
         $employee->structure_id = $structureId;
@@ -85,6 +87,7 @@ class EmployeeController extends Controller
             'email' => 'nullable|email',
             'landline_number' => 'nullable|string|unique:employees,landline_number,' . $id,
             'mobile_number' => 'nullable|string|unique:employees,mobile_number,' . $id,
+            'description' => 'nullable|string|max:1024',
             'order' => 'nullable|integer',
             'position_id' => 'nullable|integer|exists:positions,id',
             'structure_id' => 'nullable|integer|exists:structure,id',
