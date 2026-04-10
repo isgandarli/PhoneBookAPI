@@ -16,6 +16,12 @@ Route::prefix('auth')->group(function () {
 
 Route::get('/phonebook', [PhonebookController::class, 'index']);
 
+// Public read-only routes (no JWT required)
+Route::apiResource('structure-types', StructureTypeController::class)->only(['index', 'show']);
+Route::apiResource('positions', PositionController::class)->only(['index', 'show']);
+Route::apiResource('structures', StructureController::class)->only(['index', 'show']);
+Route::apiResource('employees', EmployeeController::class)->only(['index', 'show']);
+
 // Protected routes (JWT required)
 Route::middleware('jwt.auth')->group(function () {
     Route::prefix('auth')->group(function () {
@@ -23,8 +29,8 @@ Route::middleware('jwt.auth')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
     });
 
-    Route::apiResource('structure-types', StructureTypeController::class);
-    Route::apiResource('positions', PositionController::class);
-    Route::apiResource('structures', StructureController::class);
-    Route::apiResource('employees', EmployeeController::class);
+    Route::apiResource('structure-types', StructureTypeController::class)->except(['index', 'show']);
+    Route::apiResource('positions', PositionController::class)->except(['index', 'show']);
+    Route::apiResource('structures', StructureController::class)->except(['index', 'show']);
+    Route::apiResource('employees', EmployeeController::class)->except(['index', 'show']);
 });
