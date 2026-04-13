@@ -126,7 +126,7 @@ class EmployeeController extends Controller
             'structure_id' => 'nullable|integer|exists:structure,id',
         ]);
 
-        $employee = Employee::find($id);
+        $employee = Employee::findOrFail($id);
         $oldStructureId = $employee->structure_id;
         $oldOrder = $employee->order;
         $newStructureId = $request->filled('structure_id') ? $request->input('structure_id') : $oldStructureId;

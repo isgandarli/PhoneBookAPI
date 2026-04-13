@@ -50,7 +50,7 @@ class StructureTypeController extends Controller
             'name' => 'required|string|unique:structure_types,name,' . $id,
         ]);
 
-        $structure_type = Structure_Type::find($id);
+        $structure_type = Structure_Type::findOrFail($id);
         $structure_type->name = $request['name'];
         $structure_type->save();
 

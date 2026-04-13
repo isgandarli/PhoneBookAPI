@@ -80,7 +80,7 @@ class StructureController extends Controller
             'order' => 'nullable|integer',
         ]);
 
-        $structure = Structure::find($id);
+        $structure = Structure::findOrFail($id);
         $oldParentId = $structure->parent_id;
         $oldOrder = $structure->order;
         $newParentId = $request->filled('parent_id') ? $request->input('parent_id') : $oldParentId;

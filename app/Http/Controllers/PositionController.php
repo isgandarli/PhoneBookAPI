@@ -50,7 +50,7 @@ class PositionController extends Controller
             'name' => 'required|string|unique:positions,name,' . $id,
         ]);
 
-        $position = Position::find($id);
+        $position = Position::findOrFail($id);
         $position->name = $request['name'];
         $position->save();
 
