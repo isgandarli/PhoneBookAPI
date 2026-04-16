@@ -5,7 +5,7 @@ meta {
 }
 
 put {
-  url: {{base_url}}/structures/1
+  url: 172.16.12.94:8080/api/structures/6
   body: json
   auth: inherit
 }
@@ -13,16 +13,27 @@ put {
 headers {
   Content-Type: application/json
   Accept: application/json
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc3NjA2ODM2NiwiZXhwIjoxNzc2MDcxOTY2LCJ1c2VybmFtZSI6ImFkbWluIn0.VEzQCP6mjZ55w5Xt5mGdjniJM9jyLMtW61Hr4gAIit8
 }
 
 body:json {
   {
-    "name": "İnformasiya Texnologiyaları Şöbəsi"
-  }
-}
-
-settings {
-  encodeUrl: true
+      "name": "İnformasiya Texnologiyalarının Təşkili və Tətbiqi İdarəsi: Ünvan: Az 1012, Bakı ş. Moskva pr.67, Tel:012 431 47 67",
+      "parent_id": 619,
+      "order": 18,
+      "structure_type_id": 4,
+      "deleted_at": null,
+      "created_at": "2026-04-10T11:45:09.000000Z",
+      "updated_at": "2026-04-10T11:45:09.000000Z",
+      "description": null,
+      "structure_type": {
+        "id": 4,
+        "name": "İdarə",
+        "deleted_at": null,
+        "created_at": "2026-04-10T11:45:09.000000Z",
+        "updated_at": "2026-04-10T11:45:09.000000Z"
+      }
+    }
 }
 
 docs {
